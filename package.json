@@ -1,7 +1,7 @@
 {
-  "name": "firebot-custom-script-starter",
-  "scriptOutputName": "starterScript",
-  "version": "1.0.0",
+  "name": "firebot-ha",
+  "scriptOutputName": "firebot-ha",
+  "version": "0.0.1",
   "description": "A starter Firebot custom script",
   "main": "",
   "scripts": {
@@ -10,10 +10,11 @@
     "copy": "node ./scripts/copy-build.js",
     "test": "jest"
   },
-  "author": "ebiggz",
+  "author": "TSG",
   "license": "GNU3",
   "devDependencies": {
-    "@crowbartools/firebot-custom-scripts-types": "^5.63.0",
+    "@brittonhayes/homeassistant-ts": "github:brittonhayes/homeassistant-ts",
+    "@crowbartools/firebot-custom-scripts-types": "git+https://github.com/cozyGalvinism/firebot-custom-scripts-types.git",
     "@types/node": "^20.14.0",
     "jest": "^29.7.0",
     "terser-webpack-plugin": "^5.3.10",
@@ -26,5 +27,8 @@
   "volta": {
     "node": "20.14.0",
     "npm": "10.8.1"
+  },
+  "dependencies": {
+    "openapi-typescript-fetch": "^2.0.0"
   }
 }
