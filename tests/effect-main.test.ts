@@ -8,6 +8,7 @@ const scriptVersion = "1.0.0";
 interface Params {}
 interface ScriptParams extends Record<string, unknown> {}
 
+// Script Name, Description, Author, Etc.
 const script: Firebot.CustomScript<Params> = {
   getScriptManifest: () => {
     return {
@@ -22,6 +23,7 @@ const script: Firebot.CustomScript<Params> = {
   },
   getDefaultParameters: () => {
     return {};
+  // The part that runs the test.ts script  
   },
   run: (runRequest: RunRequest<ScriptParams>) => {
     const { logger } = runRequest.modules;
