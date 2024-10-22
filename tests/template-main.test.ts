@@ -1,6 +1,6 @@
 import { RunRequest, ScriptModules } from "firebot-custom-scripts-types";
 import { ArgumentsOf } from "ts-jest/dist/utils/testing";
-import customScript from "../src/main";
+import customScript from "./effect-main.test";
 test("main default export is the custom script", () => {
   expect(customScript).not.toBeUndefined();
   expect(customScript.run).not.toBeUndefined();
