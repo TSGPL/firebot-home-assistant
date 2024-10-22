@@ -1,29 +1,30 @@
 import { Firebot } from "@crowbartools/firebot-custom-scripts-types";
-import * as homeassistant from '@brittonhayes/homeassistant-ts';
-//import { register } from "./homeassistant";
-
 interface Params {
   message: string;
 }
-
 const script: Firebot.CustomScript<Params> = {
   getScriptManifest: () => {
     return {
-      name: "Home Assistant Integration",
-      description: "[WIP] A script that allows you to connect Home Assistant to Firebot, so that you can control your smart lights.",
-      author: "TSG",
-      version: "0.0.1",
+      name: "Starter Custom Script",
+      description: "A starter custom script for build",
+      author: "SomeDev",
+      version: "1.0",
       firebotVersion: "5",
     };
   },
   getDefaultParameters: () => {
-    return {};
+    return {
+      message: {
+        type: "string",
+        default: "Hello World!",
+        description: "Message",
+        secondaryDescription: "Enter a message here",
+      },
+    };
   },
   run: (runRequest) => {
     const { logger } = runRequest.modules;
     logger.info(runRequest.parameters.message);
-    register(runRequest)
   },
 };
-
 export default script;
