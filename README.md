@@ -6,9 +6,6 @@ Well, as long as those lights are connected through Home Assistant, now you can!
 
 For now, the integration currently adds 1 effect. Which allows you to control any lights that you have connected through Home Assistant. We're open to adding more features in the future, but this is the integrations main feature/purpose!
 
-## Prerequisites
-You must have a [Home Assistant](https://www.home-assistant.io/) instance hosted on your private network, which you can install in different ways by checking out the [Home Assistant Documentation](https://www.home-assistant.io/installation/).
-
 ## How to use
 1. Download the latest **firebot-ha.js** file from [Releases](https://github.com/phroggster/firebot-google-cloud-tts/releases)
 2. Add the **firebot-ha.js** as a startup script in [Firebot](https://firebot.app/) (Settings > Advanced > Startup Scripts).
