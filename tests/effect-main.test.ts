@@ -12,12 +12,12 @@ interface ScriptParams extends Record<string, unknown> {}
 const script: Firebot.CustomScript<Params> = {
   getScriptManifest: () => {
     return {
-      name: "Clean Bad Words",
+      name: "Firebot Home Assistant",
       description:
-        "Passes a user entered message through a bad word filter and returns the cleaned message to a Custom Variable.",
-      author: "codehdn",
-      website: "https://codehdn.com",
-      version: scriptVersion,
+        "Custom Script for Integrating Home Assistant into Firebot for controlling Smart Lights!",
+      author: "TSG & Tux",
+      //website: "",
+      version: 0.1.0,
       firebotVersion: "5",
     };
   },
@@ -27,7 +27,7 @@ const script: Firebot.CustomScript<Params> = {
   },
   run: (runRequest: RunRequest<ScriptParams>) => {
     const { logger } = runRequest.modules;
-    logger.info("Registering Clean Bad Words Effect...");
+    logger.info("Registering The HA Lights Effect...");
     runRequest.modules.effectManager.registerEffect(
       buildTestEffect(runRequest)
     );
