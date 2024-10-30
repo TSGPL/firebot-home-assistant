@@ -29,6 +29,7 @@
     "npm": "10.8.1"
   },
   "dependencies": {
-    "openapi-typescript-fetch": "^2.0.0"
+    "openapi-typescript-fetch": "^2.0.0",
+    "tiny-typed-emitter": "^2.1.0"
   }
 }
