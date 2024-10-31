@@ -25,7 +25,7 @@ const script: Firebot.CustomScript<Params> = {
   },
   getDefaultParameters: () => {
     return {};
-  // The part that runs the test.ts script  
+  // The part that runs the ha-integration.ts and light-effect.ts scripts  
   },
   run: (runRequest: RunRequest<ScriptParams>) => {
     const { logger, integrationManager } = runRequest.modules;
