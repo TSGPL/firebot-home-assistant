@@ -2,7 +2,7 @@
   "name": "firebot-home-assistant",
   "scriptOutputName": "firebot-home-assistant",
   "version": "0.0.1",
-  "description": "A starter Firebot custom script",
+  "description": "A Firebot script to control Home Assistant",
   "main": "",
   "scripts": {
     "build": "webpack",

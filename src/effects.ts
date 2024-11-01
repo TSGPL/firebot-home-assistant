@@ -1,9 +1,9 @@
 import { RunRequest } from "@crowbartools/firebot-custom-scripts-types";
 import { Effects } from "@crowbartools/firebot-custom-scripts-types/types/effects";
+import { HomeAssistantAPI } from "./homeassistant";
 
-interface ScriptParams extends Record<string, unknown> {}
+interface ScriptParams extends Record<string, unknown> { }
 
-// The options template variable that gets used later on line 39
 const optionsTemplate = `
         <eos-container header="Light">
             <firebot-searchable-select
@@ -98,51 +98,98 @@ export const HomeAssistantLightEffect = (
     const logger = runRequest.modules.logger;
     return {
         definition: {
-            id: "tsg:ha-light-effect", // ID of the effect
+            id: "ha:light-effect", // ID of the effect
             name: "Control Home Assistant Light", // Name of the effect
             description:
-              "Control a Home Assistant Light", // Effects Description
+                "Control a Home Assistant Light", // Effects Description
             icon: "far fa-lightbulb fa-align-center", // Icon that the effect uses
             categories: ["integrations"] as Effects.EffectCategory[], // In which category the effect will be found in
             triggers: {
-              command: true,
-              event: true,
-              manual: true,
+                command: true,
+                event: true,
+                manual: true,
             },
         },
         // ???
         optionsTemplate,
         optionsController: ($scope: any) => {
             if (!$scope.effect.text) {
-              $scope.effect.text = "";
+                $scope.effect.text = "";
             }
             if (!$scope.effect.variableName) {
-              $scope.effect.variableName = "";
+                $scope.effect.variableName = "";
             }
         },
         // A fail-safe to make sure that the required text isn't missing in the effect input.
         optionsValidator: (effect: any) => {
             const errors = [];
             if (!effect.text) {
-              errors.push("Text to clean is required");
+                errors.push("Text to clean is required");
             }
             return errors;
-          },
+        },
         // What to do when the event gets triggered
         onTriggerEvent: async (event: any) => {
             const effect = event.effect;
             try {
-              const processedText = (effect.text).split("").reverse().join(""); // The processing of the text
-              // ??
-              runRequest.modules.customVariableManager.addCustomVariable(
-                effect.variableName,
-                processedText
-              );
-              return true;
+
+                return true;
             } catch (error) {
-              logger.error(error);
-              return false;
+                logger.error(error);
+                return false;
             }
-          },
-        };
-      };
+        },
+    };
+};
+
+const toggleOptionsTemplate = `
+      <eos-container header="Light">
+          <textarea ng-model="effect.entity" class="form-control" name="entity" placeholder="Enter entity ID" rows="1" cols="100" replace-variables menu-position="under"></textarea>
+      </eos-container>      
+`;
+
+export const ToggleEffect = (
+    runRequest: RunRequest<ScriptParams>
+) => {
+    const logger = runRequest.modules.logger;
+    return {
+        definition: {
+            id: "ha:light-toggle",
+            name: "Home Assistant: Toggle light",
+            description: "Toggles a light through Home Assistant",
+            icon: "far fa-lightbulb fa-align-center",
+            categories: ["integrations"] as Effects.EffectCategory[],
+            triggers: {
+                command: true,
+                event: true,
+                manual: true,
+            },
+        },
+        optionsTemplate: toggleOptionsTemplate,
+        optionsController: ($scope: any) => {
+            if (!$scope.effect.entity) {
+                $scope.effect.entity = "";
+            }
+        },
+        optionsValidator: (effect: any) => {
+            logger.debug("Toggle light validator", effect);
+
+            const errors = [];
+            if (!effect.entity) {
+                errors.push("Entity ID is required");
+            }
+            return errors;
+        },
+        onTriggerEvent: async (event: any) => {
+            const entity_id = event.effect.entity;
+            try {
+                HomeAssistantAPI.make().toggleLight(entity_id);
+
+                return true;
+            } catch (error) {
+                logger.error(error);
+                return false;
+            }
+        },
+    };
+};

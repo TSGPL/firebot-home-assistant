@@ -1,12 +1,7 @@
-import {
-  Integration,
-  IntegrationController,
-  IntegrationData,
-  IntegrationEvents,
-} from "@crowbartools/firebot-custom-scripts-types";
+import { Integration, IntegrationController, IntegrationData, IntegrationEvents } from "@crowbartools/firebot-custom-scripts-types";
 import { Logger } from "@crowbartools/firebot-custom-scripts-types/types/modules/logger";
 import { TypedEmitter } from "tiny-typed-emitter";
-
+import * as HA from './homeassistant'
 
 class IntegrationEventEmitter extends TypedEmitter<IntegrationEvents> { }
 
@@ -26,31 +21,32 @@ class HomeAssistantIntegration
     super();
   }
 
-  init(
-    linked: boolean,
-    integrationData: IntegrationData<IntegrationSettings>
-  ): void | PromiseLike<void> {
-    this.logger.info(
-      "Home Assistant Init",
-      integrationData.userSettings?.integrationSettings?.haUrl,
-      integrationData.userSettings?.integrationSettings?.haToken
-    );
+  // On Firebot load
+  async init(linked: boolean, integrationData: IntegrationData<IntegrationSettings>): Promise<void> {
+    this.logger.info("Home Assistant Init");
+
+    const ha = HA.HomeAssistantAPI.make();
+    ha.setLogger(this.logger);
+
+    if (!integrationData.userSettings?.integrationSettings?.haUrl || !integrationData.userSettings?.integrationSettings?.haToken) {
+      this.logger.debug('Home Assistant is not configured yet');
+      return;
+    }
+
+    ha.setCredentials(integrationData.userSettings.integrationSettings.haUrl, integrationData.userSettings.integrationSettings.haToken);
+    this.connected = true;
   }
 
-  onUserSettingsUpdate?(
-    integrationData: IntegrationData<IntegrationSettings>
-  ): void | PromiseLike<void> {
-    this.logger.info(
-      "Home Assistant updated",
-      integrationData.userSettings?.integrationSettings?.haUrl,
-      integrationData.userSettings?.integrationSettings?.haToken
-    );
+  // On Integration update
+  onUserSettingsUpdate?(integrationData: IntegrationData<IntegrationSettings>): void | PromiseLike<void> {
+    this.logger.info("Home Assistant updated");
+
+    HA.HomeAssistantAPI.make().setCredentials(integrationData.userSettings.integrationSettings.haUrl, integrationData.userSettings.integrationSettings.haToken);
+    this.connected = true;
   }
 }
 
-export const getIntegration = (
-  logger: Logger
-): Integration<IntegrationSettings> => ({
+export const HomeAssistant = (logger: Logger): Integration<IntegrationSettings> => ({
   definition: {
     id: "home-assistant-integration",
     name: "Home Assistant",
