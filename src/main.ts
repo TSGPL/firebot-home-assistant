@@ -17,7 +17,7 @@ const script: Firebot.CustomScript<Params> = {
       name: "Firebot Home Assistant",
       description:
         "Custom Script for Integrating Home Assistant into Firebot for controlling Smart Lights!",
-      author: "TSGPL_, M1sterTux",
+      author: "TSGPL_ & M1sterTux",
       version: "0.1.0",
       firebotVersion: "5",
       startupOnly: true,
@@ -30,10 +30,10 @@ const script: Firebot.CustomScript<Params> = {
   run: (runRequest: RunRequest<ScriptParams>) => {
     const { logger, integrationManager } = runRequest.modules;
     integrationManager.registerIntegration(getIntegration(logger));
-    logger.info("Registering The Home Assistant Light Effect...");
-    runRequest.modules.effectManager.registerEffect(
-      HomeAssistantLightEffect(runRequest)
-    );
+    // logger.info("Registering The Home Assistant Light Effect...");
+    // runRequest.modules.effectManager.registerEffect(
+    //   HomeAssistantLightEffect(runRequest)
+    // );
   },
 };
 

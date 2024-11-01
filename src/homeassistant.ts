@@ -38,7 +38,7 @@ const integrationDefinition: IntegrationDefinition = {
     id: "HomeAssistant",
     name: "HomeAssistant",
     description: "Control HomeAssistant Devices.",
-    connectionToggle: true,
+    connectionToggle: false,
     configurable: false,
     settingCategories: {
         integrationSettings: {
@@ -52,23 +52,21 @@ const integrationDefinition: IntegrationDefinition = {
                 },
                 haToken: {
                     title: "Access Token",
-                    type: "string",
+                    type: "password",
                     default: "",
-                    description: "The Long lived access token",
-                }
-            }
-        }
-    },
-    linkType: "id",
-    idDetails: {
-        steps:
-            `1. In home assistant go to your [profile](https://my.home-assistant.io/redirect/profile) and open the *security* tab.
+                    description: `The Long lived access token
+1. In home assistant go to your [profile](https://my.home-assistant.io/redirect/profile) and open the *security* tab.
 
 2. Create a long lived access token on the bottom of this page, name it Firebot and copy the token
    If you forgot to copy it, you will need to delete the existing token and create a new one.
 
-3. Fill your Home Assistant URL and paste access token into the fields below`
-    }
+3. Fill your Home Assistant URL and paste access token into the fields below
+                    `,
+                }
+            }
+        }
+    },
+    linkType: "none"
 };
 
 const optionsTemplate = `

@@ -1,5 +1,5 @@
 {
-  "name": "firebot-ha",
+  "name": "firebot-home-assistant",
   "scriptOutputName": "firebot-home-assistant",
   "version": "0.0.1",
   "description": "A starter Firebot custom script",

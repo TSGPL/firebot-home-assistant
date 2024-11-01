@@ -10,5 +10,5 @@
         "experimentalDecorators": true,
         "downlevelIteration": true
     },
-    "include": ["./src/**/*", "src/light-effect.ts", "src/main.ts"]
+    "include": ["./src/**/*"]
 }
