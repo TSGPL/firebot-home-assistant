@@ -11,7 +11,7 @@
     "copy": "node ./scripts/copy-build.js",
     "test": "jest"
   },
-  "author": "TSG",
+  "author": "TSGPL_ & M1sterTux",
   "license": "GNU3",
   "devDependencies": {
     "@crowbartools/firebot-custom-scripts-types": "github:cozyGalvinism/firebot-custom-scripts-types",
