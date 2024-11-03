@@ -1,12 +1,8 @@
-import {
-  Firebot,
-  RunRequest,
-}
-  from "@crowbartools/firebot-custom-scripts-types";
-import * as effects from "./effects";
+import { Firebot, RunRequest } from "@crowbartools/firebot-custom-scripts-types";
 import { HomeAssistant } from "./integration"
+import * as controlLight from "./effects/control-light";
+import * as toggleLight from "./effects/toggle-light";
 
-const scriptVersion = "1.0.0";
 interface Params { }
 interface ScriptParams extends Record<string, unknown> { }
 
@@ -33,8 +29,8 @@ const script: Firebot.CustomScript<Params> = {
     integrationManager.registerIntegration(HomeAssistant(logger));
 
     // Load effects
-    runRequest.modules.effectManager.registerEffect(effects.HomeAssistantLightEffect(runRequest));
-    runRequest.modules.effectManager.registerEffect(effects.ToggleEffect(runRequest));
+    runRequest.modules.effectManager.registerEffect(controlLight.effect(runRequest));
+    runRequest.modules.effectManager.registerEffect(toggleLight.effect(runRequest));
   },
 };
 
