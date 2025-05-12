@@ -41,9 +41,8 @@ export const effect = (
             return errors;
         },
         onTriggerEvent: async (event: any) => {
-            const entity_id = event.effect.entity;
             try {
-                ha.toggleLight(entity_id);
+                ha.toggleLight(event.effect.entity);
 
                 return true;
             } catch (error) {

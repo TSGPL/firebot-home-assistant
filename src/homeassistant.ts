@@ -1,7 +1,7 @@
 import { Logger } from '@crowbartools/firebot-custom-scripts-types/types/modules/logger';
 import axios, { Axios } from "axios";
 
-interface Entity {
+export interface HaEntity {
     entity_id: string,
     state: string,
     attributes: {
@@ -48,15 +48,15 @@ export class HomeAssistantAPI {
     /**
      * Retrieve all states, but filter out unavailable entities
      */
-    public async states(): Promise<Array<Entity>> {
-        return (await this.client.get('states')).data.filter((state: Entity) => state.state !== 'unavailable');
+    public async states(): Promise<Array<HaEntity>> {
+        return (await this.client.get('states')).data.filter((state: HaEntity) => state.state !== 'unavailable');
     }
 
     /**
      * Retrieve all available lights
      */
-    public async lights(): Promise<Array<Entity>> {
-        return (await this.states()).filter((state: Entity) => {
+    public async lights(): Promise<Array<HaEntity>> {
+        return (await this.states()).filter((state: HaEntity) => {
             return state.entity_id.startsWith('light.');
         });
     }
@@ -68,5 +68,11 @@ export class HomeAssistantAPI {
         this.client.post('services/light/toggle', {
             'entity_id': entity_id
         });
+    }
+
+    public controlLight(effect: any) {
+        this.logger.info('Received effect for controlling light', effect);
+
+        throw new Error("Method not implemented.");
     }
 }

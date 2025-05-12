@@ -1,13 +1,29 @@
 import { RunRequest } from "@crowbartools/firebot-custom-scripts-types";
-import { Effects } from "@crowbartools/firebot-custom-scripts-types/types/effects";
-import { HomeAssistantAPI } from "../homeassistant";
+import { Effects, EffectScope } from "@crowbartools/firebot-custom-scripts-types/types/effects";
+import { HomeAssistantAPI, HaEntity } from "../homeassistant";
+import { HomeAssistant } from "../integration";
 
 interface ScriptParams extends Record<string, unknown> { }
-const ha = HomeAssistantAPI.make();
+export type HaControlLightEffectData = {
+    lightId: string;
+    updateActivated: boolean;
+    activationAction?: "off" | "on" | "toggle";
+    updateBrightness: boolean;
+    brightnessPercentage?: string;
+    updateColor: boolean;
+    /**
+     * Hex color string
+     */
+    color?: string;
+    triggerEffectAnimation: boolean;
+    effectAnimationType?: "colorloop" | "none";
+    triggerAlert: boolean;
+    alertType?: "short" | "long" | "disable";
+    transitionType?: "default" | "instant" | "fast" | "slow" | "custom";
+    customTransitionSecs?: string;
+};
 
-export const effect = (
-    runRequest: RunRequest<ScriptParams>
-) => {
+export const effect = (runRequest: RunRequest<ScriptParams>) => {
     const logger = runRequest.modules.logger;
     return {
         definition: {
@@ -15,7 +31,7 @@ export const effect = (
             name: "Control Home Assistant Light",
             description: "Control a Home Assistant Light",
             icon: "far fa-lightbulb fa-align-center",
-            categories: ["integrations"] as Effects.EffectCategory[],
+            categories: ["fun", "integrations"] as Effects.EffectCategory[],
             triggers: {
                 command: true,
                 event: true,
@@ -107,32 +123,126 @@ export const effect = (
                     </div>
                 </div>
             </eos-container>`,
-        optionsController: ($scope: any) => {
-            if (!$scope.effect.text) {
-                $scope.effect.text = "";
+        optionsController: (
+            $scope: EffectScope<HaControlLightEffectData> & {
+                lights: HaEntity[];
+                selectedLight?: HaEntity;
+                selectedLightCapabilities: {
+                    color: boolean;
+                    dimming: boolean;
+                }
+            },
+        ) => {
+            $scope.lights = [];
+
+            $scope.selectedLight = null;
+            $scope.selectedLightCapabilities = {
+                color: false,
+                dimming: false
+            };
+
+            function updateSelectedLight() {
+                $scope.selectedLight = $scope.lights.find(l => l.entity_id === $scope.effect.lightId);
+                $scope.selectedLightCapabilities = {
+                    color: false, // $scope.selectedLight?.capabilities?.control?.colorgamuttype != null,
+                    dimming: false //$scope.selectedLight?.capabilities?.control?.mindimlevel != null
+                };
             }
-            if (!$scope.effect.variableName) {
-                $scope.effect.variableName = "";
+
+
+            //logger.info("Fetching lights", await HomeAssistantAPI.make().lights());
+
+            // @TODO: TESTING, remove when done
+
+            const lights = [
+                { entity_id: 'light.dummy_1', attributes: { friendly_name: 'Dummy 1' } } as HaEntity,
+                { entity_id: 'light.dummy_2', attributes: { friendly_name: 'Dummy 2' } } as HaEntity,
+                { entity_id: 'light.dummy_3', attributes: { friendly_name: 'Dummy 3' } } as HaEntity,
+                { entity_id: 'light.dummy_4', attributes: { friendly_name: 'Dummy 4' } } as HaEntity,
+            ];
+
+            $scope.effect.lightId = 'light.dummy_2';
+            updateSelectedLight();
+
+            // lights.then((lights: HaEntity[]) => {
+            $scope.lights = lights.map(l => ({
+                ...l,
+                description: l.attributes.friendly_name
+            }));
+
+            if ($scope.effect.lightId) {
+                updateSelectedLight();
+            }
+            // });
+
+            $scope.onSelectLight = updateSelectedLight;
+
+            $scope.activationOptions = {
+                off: "Off",
+                on: "On",
+                toggle: "Toggle"
+            };
+
+            $scope.transitionOptions = {
+                default: "Default",
+                instant: "Instant",
+                fast: "Fast",
+                slow: "Slow",
+                custom: "Custom"
+            };
+
+            $scope.alertTypeOptions = {
+                short: "Short",
+                long: "Long",
+                disable: "Disable"
+            };
+
+            $scope.effectAnimationOptions = {
+                colorloop: "Color Loop",
+                none: "None"
+            };
+
+            if ($scope.effect.transitionType == null) {
+                $scope.effect.transitionType = "default";
             }
         },
         // A fail-safe to make sure that the required text isn't missing in the effect input.
         optionsValidator: (effect: any) => {
             const errors = [];
-            if (!effect.text) {
-                errors.push("Text to clean is required");
+
+            if (!effect.lightId) {
+                errors.push("Please select a light");
             }
+
+            if (effect.updateActivated && !effect.activationAction) {
+                errors.push("Please select an activation action");
+            }
+
+            if (effect.updateBrightness && !effect.brightnessPercentage) {
+                errors.push("Please enter a brightness percentage");
+            }
+
+            if (effect.updateColor && !effect.color) {
+                errors.push("Please select a color");
+            }
+
+            if (effect.triggerAlert && !effect.alertType) {
+                errors.push("Please select an alert type");
+            }
+
+            if (effect.triggerEffectAnimation && !effect.effectAnimationType) {
+                errors.push("Please select an effect animation type");
+            }
+
+            if (effect.transitionType === "custom" && (effect.customTransitionSecs == null || parseFloat(effect.customTransitionSecs) <= 0)) {
+                errors.push("Please enter a custom transition time greater than 0");
+            }
+
             return errors;
         },
         // What to do when the event gets triggered
         onTriggerEvent: async (event: any) => {
-            const effect = event.effect;
-            try {
-
-                return true;
-            } catch (error) {
-                logger.error(error);
-                return false;
-            }
+            HomeAssistantAPI.make().controlLight(event.effect);
         },
     };
 };
