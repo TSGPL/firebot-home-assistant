@@ -7,7 +7,7 @@ Well, as long as those lights are connected through Home Assistant, now you can!
 For now, the integration adds 1 effect, which allows you to control any lights that you have connected through Home Assistant. We're open to adding more features in the future, but this is the integration's main purpose!
 
 ## How to use
-1. Download the latest **firebot-ha.js** file from [Releases](https://github.com/phroggster/firebot-google-cloud-tts/releases)
+1. Download the latest **firebot-ha.js** file from [Releases](https://github.com/TSGPL/firebot-home-assistant/releases)
 2. Add the **firebot-ha.js** as a startup script in [Firebot](https://firebot.app/) (Settings > Advanced > Startup Scripts).
 3. After restarting Firebot. The Home Assistant integration, and a new effect called **Control Home Assistant Light** will have been added.
 4. Visit the Integration settings (Settings > Integrations). And under the *Configure* tab, paste in the URL and Access Token of your Home Assistant instance. (Steps on where to find your access token are in the configuration tab of the integration)

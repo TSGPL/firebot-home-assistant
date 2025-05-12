@@ -1,7 +1,7 @@
 import { Firebot, RunRequest } from "@crowbartools/firebot-custom-scripts-types";
 import { HomeAssistant } from "./integration"
+import { HomeAssistantAPI } from "./homeassistant";
 import * as controlLight from "./effects/control-light";
-import * as toggleLight from "./effects/toggle-light";
 
 interface Params { }
 interface ScriptParams extends Record<string, unknown> { }
@@ -22,15 +22,16 @@ const script: Firebot.CustomScript<Params> = {
     return {};
   },
   run: (runRequest: RunRequest<ScriptParams>) => {
-    const { logger, integrationManager } = runRequest.modules;
+    const { logger, integrationManager, effectManager } = runRequest.modules;
     logger.info("Loading Home Assistant custom script")
 
+    const ha = HomeAssistantAPI.make();
+
     // Load Integration setup
-    integrationManager.registerIntegration(HomeAssistant(logger));
+    integrationManager.registerIntegration(HomeAssistant(logger, ha));
 
     // Load effects
-    runRequest.modules.effectManager.registerEffect(controlLight.effect(runRequest));
-    runRequest.modules.effectManager.registerEffect(toggleLight.effect(runRequest));
+    effectManager.registerEffect(controlLight.effect(runRequest));
   },
 };
 

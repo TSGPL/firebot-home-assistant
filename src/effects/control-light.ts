@@ -1,13 +1,29 @@
 import { RunRequest } from "@crowbartools/firebot-custom-scripts-types";
-import { Effects } from "@crowbartools/firebot-custom-scripts-types/types/effects";
-import { HomeAssistantAPI } from "../homeassistant";
+import { Effects, EffectScope } from "@crowbartools/firebot-custom-scripts-types/types/effects";
+import { HomeAssistantAPI, HaEntity } from "../homeassistant";
+import { HomeAssistant } from "../integration";
 
 interface ScriptParams extends Record<string, unknown> { }
-const ha = HomeAssistantAPI.make();
+export type HaControlLightEffectData = {
+    lightId: string;
+    updateActivated: boolean;
+    activationAction?: "off" | "on" | "toggle";
+    updateBrightness: boolean;
+    brightnessPercentage?: string;
+    updateColor: boolean;
+    /**
+     * Hex color string
+     */
+    color?: string;
+    triggerEffectAnimation: boolean;
+    effectAnimationType?: "colorloop" | "none";
+    triggerAlert: boolean;
+    alertType?: "short" | "long" | "disable";
+    transitionType?: "default" | "instant" | "fast" | "slow" | "custom";
+    customTransitionSecs?: string;
+};
 
-export const effect = (
-    runRequest: RunRequest<ScriptParams>
-) => {
+export const effect = (runRequest: RunRequest<ScriptParams>) => {
     const logger = runRequest.modules.logger;
     return {
         definition: {
@@ -15,7 +31,7 @@ export const effect = (
             name: "Control Home Assistant Light",
             description: "Control a Home Assistant Light",
             icon: "far fa-lightbulb fa-align-center",
-            categories: ["integrations"] as Effects.EffectCategory[],
+            categories: ["fun", "integrations"] as Effects.EffectCategory[],
             triggers: {
                 command: true,
                 event: true,
@@ -61,47 +77,7 @@ export const effect = (
                     model="effect.updateColor"
                 />
                 <div ng-if="effect.updateColor" class="ml-10 mb-3">
-                    <color-picker-input
-                        model="effect.color"
-                    />
-                </div>
-        
-                <firebot-checkbox
-                    label="Trigger Alert"
-                    model="effect.triggerAlert"
-                />
-                <div ng-if="effect.triggerAlert" class="ml-10 mb-3">
-                    <dropdown-select
-                        options="alertTypeOptions"
-                        selected="effect.alertType"
-                    />
-                </div>
-        
-                <firebot-checkbox
-                    label="Set Effect Animation"
-                    model="effect.triggerEffectAnimation"
-                />
-                <div ng-if="effect.triggerEffectAnimation" class="ml-10 mb-3">
-                    <dropdown-select
-                        options="effectAnimationOptions"
-                        selected="effect.effectAnimationType"
-                    />
-                </div>
-        
-                <div>
-                    <h4>Transition</h4>
-                    <dropdown-select
-                        options="transitionOptions"
-                        selected="effect.transitionType"
-                    />
-                    <div ng-if="effect.transitionType == 'custom'" class="mt-3">
-                        <firebot-input
-                            input-title="Seconds"
-                            data-type="number"
-                            model="effect.customTransitionSecs"
-                            placeholder-text="Enter seconds"
-                        />
-                    </div>
+                    <color-picker-input model="effect.color" />
                 </div>
             </eos-container>`,
         optionsController: ($scope: any, backendCommunicator: any) => {
@@ -111,77 +87,38 @@ export const effect = (
             if (!$scope.effect.variableName) {
                 $scope.effect.variableName = "";
             }
-        
-            // function updateSelectedLight() {
-            //     $scope.selectedLight = $scope.lights.find(l =>
-            //         l.id === $scope.effect.lightId);
-            //     $scope.selectedLightCapabilities = {
-            //         color: $scope.selectedLight?.capabilities?.control?.colorgamuttype != null,
-            //         dimming: $scope.selectedLight?.capabilities?.control?.mindimlevel != null
-            //     };
-            // }
-        
-            // backendCommunicator.fireEventAsync("getAllHueLights")
-            //     .then((lights: HueLightData[]) => {
-            //         $scope.lights = lights.map(l => ({
-            //             ...l,
-            //             description: l.type
-            //         }));
-        
-            //         if ($scope.effect.lightId) {
-            //             updateSelectedLight();
-            //         }
-            //     });
-        
-            // $scope.onSelectLight = updateSelectedLight;
-        
+                
             $scope.activationOptions = {
                 off: "Off",
                 on: "On",
                 toggle: "Toggle"
             };
-        
-            $scope.transitionOptions = {
-                default: "Default",
-                instant: "Instant",
-                fast: "Fast",
-                slow: "Slow",
-                custom: "Custom"
-            };
-        
-            $scope.alertTypeOptions = {
-                short: "Short",
-                long: "Long",
-                disable: "Disable"
-            };
-        
-            $scope.effectAnimationOptions = {
-                colorloop: "Color Loop",
-                none: "None"
-            };
-        
-            if ($scope.effect.transitionType == null) {
-                $scope.effect.transitionType = "default";
-            }
         },
         // A fail-safe to make sure that the required text isn't missing in the effect input.
         optionsValidator: (effect: any) => {
             const errors = [];
-            if (!effect.text) {
-                errors.push("Text to clean is required");
+
+            if (!effect.lightId) {
+                errors.push("Please select a light");
             }
+
+            if (effect.updateActivated && !effect.activationAction) {
+                errors.push("Please select an activation action");
+            }
+
+            if (effect.updateBrightness && !effect.brightnessPercentage) {
+                errors.push("Please enter a brightness percentage");
+            }
+
+            if (effect.updateColor && !effect.color) {
+                errors.push("Please select a color");
+            }
+
             return errors;
         },
         // What to do when the event gets triggered
         onTriggerEvent: async (event: any) => {
-            const effect = event.effect;
-            try {
-
-                return true;
-            } catch (error) {
-                logger.error(error);
-                return false;
-            }
+            HomeAssistantAPI.make().controlLight(event.effect);
         },
     };
 };
