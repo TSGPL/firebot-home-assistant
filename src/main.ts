@@ -14,7 +14,7 @@ const script: Firebot.CustomScript<Params> = {
       description:
         "Custom Script for Integrating Home Assistant into Firebot for controlling Smart Lights!",
       author: "TSGPL_ & M1sterTux",
-      version: "0.1.0",
+      version: "0.1.1",
       firebotVersion: "5",
       startupOnly: true,
     };

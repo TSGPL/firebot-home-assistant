@@ -40,14 +40,14 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
         },
         optionsTemplate: `
             <eos-container header="Light">
-                <firebot-searchable-select
-                    items="lights"
-                    ng-model="effect.lightId"
-                    on-select="onSelectLight()"
-                    placeholder="Search for light"
+                <firebot-input
+                    input-title="Light"
+                    model="effect.lightId"
+                    placeholder="Enter entity ID"
                 />
             </eos-container>
-            <eos-container header="Options" ng-if="selectedLight != null" pad-top="true">
+        
+            <eos-container header="Options" ng-if="effect.lightId" pad-top="true">
                 <firebot-checkbox
                     label="Update Activated"
                     model="effect.updateActivated"
@@ -58,55 +58,52 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
                         selected="effect.activationAction"
                     />
                 </div>
-                <div ng-if="selectedLightCapabilities.dimming">
-                    <firebot-checkbox
-                        label="Update Brightness"
-                        model="effect.updateBrightness"
+        
+                <firebot-checkbox
+                    label="Update Brightness"
+                    model="effect.updateBrightness"
+                />
+                <div ng-if="effect.updateBrightness" class="ml-10 mb-3">
+                    <firebot-input
+                        input-title="Percentage (1-100)"
+                        data-type="number"
+                        model="effect.brightnessPercentage"
+                        placeholder-text="Enter brightness percentage"
                     />
-                    <div ng-if="effect.updateBrightness" class="ml-10 mb-3">
-                        <firebot-input
-                            input-title="Percentage (1-100)"
-                            data-type="number"
-                            model="effect.brightnessPercentage"
-                            placeholder-text="Enter brightness percentage"
-                        />
-                    </div>
                 </div>
-                <div ng-if="selectedLightCapabilities.color">
-                    <firebot-checkbox
-                        label="Update Color"
-                        model="effect.updateColor"
+        
+                <firebot-checkbox
+                    label="Update Color"
+                    model="effect.updateColor"
+                />
+                <div ng-if="effect.updateColor" class="ml-10 mb-3">
+                    <color-picker-input
+                        model="effect.color"
                     />
-                    <div ng-if="effect.updateColor" class="ml-10 mb-3">
-                        <color-picker-input
-                            model="effect.color"
-                        />
-                    </div>
                 </div>
-                <div ng-if="selectedLightCapabilities.dimming">
-                    <firebot-checkbox
-                        label="Trigger Alert"
-                        model="effect.triggerAlert"
+        
+                <firebot-checkbox
+                    label="Trigger Alert"
+                    model="effect.triggerAlert"
+                />
+                <div ng-if="effect.triggerAlert" class="ml-10 mb-3">
+                    <dropdown-select
+                        options="alertTypeOptions"
+                        selected="effect.alertType"
                     />
-                    <div ng-if="effect.triggerAlert" class="ml-10 mb-3">
-                        <dropdown-select
-                            options="alertTypeOptions"
-                            selected="effect.alertType"
-                        />
-                    </div>
                 </div>
-                <div ng-if="selectedLightCapabilities.color">
-                    <firebot-checkbox
-                        label="Set Effect Animation"
-                        model="effect.triggerEffectAnimation"
+        
+                <firebot-checkbox
+                    label="Set Effect Animation"
+                    model="effect.triggerEffectAnimation"
+                />
+                <div ng-if="effect.triggerEffectAnimation" class="ml-10 mb-3">
+                    <dropdown-select
+                        options="effectAnimationOptions"
+                        selected="effect.effectAnimationType"
                     />
-                    <div ng-if="effect.triggerEffectAnimation" class="ml-10 mb-3">
-                        <dropdown-select
-                            options="effectAnimationOptions"
-                            selected="effect.effectAnimationType"
-                        />
-                    </div>
                 </div>
+        
                 <div>
                     <h4>Transition</h4>
                     <dropdown-select
@@ -123,66 +120,43 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
                     </div>
                 </div>
             </eos-container>`,
-        optionsController: (
-            $scope: EffectScope<HaControlLightEffectData> & {
-                lights: HaEntity[];
-                selectedLight?: HaEntity;
-                selectedLightCapabilities: {
-                    color: boolean;
-                    dimming: boolean;
-                }
-            },
-        ) => {
-            $scope.lights = [];
-
-            $scope.selectedLight = null;
-            $scope.selectedLightCapabilities = {
-                color: false,
-                dimming: false
-            };
-
-            function updateSelectedLight() {
-                $scope.selectedLight = $scope.lights.find(l => l.entity_id === $scope.effect.lightId);
-                $scope.selectedLightCapabilities = {
-                    color: false, // $scope.selectedLight?.capabilities?.control?.colorgamuttype != null,
-                    dimming: false //$scope.selectedLight?.capabilities?.control?.mindimlevel != null
-                };
+        optionsController: ($scope: any, backendCommunicator: any) => {
+            if (!$scope.effect.text) {
+                $scope.effect.text = "";
             }
-
-
-            //logger.info("Fetching lights", await HomeAssistantAPI.make().lights());
-
-            // @TODO: TESTING, remove when done
-
-            const lights = [
-                { entity_id: 'light.dummy_1', attributes: { friendly_name: 'Dummy 1' } } as HaEntity,
-                { entity_id: 'light.dummy_2', attributes: { friendly_name: 'Dummy 2' } } as HaEntity,
-                { entity_id: 'light.dummy_3', attributes: { friendly_name: 'Dummy 3' } } as HaEntity,
-                { entity_id: 'light.dummy_4', attributes: { friendly_name: 'Dummy 4' } } as HaEntity,
-            ];
-
-            $scope.effect.lightId = 'light.dummy_2';
-            updateSelectedLight();
-
-            // lights.then((lights: HaEntity[]) => {
-            $scope.lights = lights.map(l => ({
-                ...l,
-                description: l.attributes.friendly_name
-            }));
-
-            if ($scope.effect.lightId) {
-                updateSelectedLight();
+            if (!$scope.effect.variableName) {
+                $scope.effect.variableName = "";
             }
-            // });
-
-            $scope.onSelectLight = updateSelectedLight;
-
+        
+            // function updateSelectedLight() {
+            //     $scope.selectedLight = $scope.lights.find(l =>
+            //         l.id === $scope.effect.lightId);
+            //     $scope.selectedLightCapabilities = {
+            //         color: $scope.selectedLight?.capabilities?.control?.colorgamuttype != null,
+            //         dimming: $scope.selectedLight?.capabilities?.control?.mindimlevel != null
+            //     };
+            // }
+        
+            // backendCommunicator.fireEventAsync("getAllHueLights")
+            //     .then((lights: HueLightData[]) => {
+            //         $scope.lights = lights.map(l => ({
+            //             ...l,
+            //             description: l.type
+            //         }));
+        
+            //         if ($scope.effect.lightId) {
+            //             updateSelectedLight();
+            //         }
+            //     });
+        
+            // $scope.onSelectLight = updateSelectedLight;
+        
             $scope.activationOptions = {
                 off: "Off",
                 on: "On",
                 toggle: "Toggle"
             };
-
+        
             $scope.transitionOptions = {
                 default: "Default",
                 instant: "Instant",
@@ -190,18 +164,18 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
                 slow: "Slow",
                 custom: "Custom"
             };
-
+        
             $scope.alertTypeOptions = {
                 short: "Short",
                 long: "Long",
                 disable: "Disable"
             };
-
+        
             $scope.effectAnimationOptions = {
                 colorloop: "Color Loop",
                 none: "None"
             };
-
+        
             if ($scope.effect.transitionType == null) {
                 $scope.effect.transitionType = "default";
             }
