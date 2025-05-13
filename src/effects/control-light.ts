@@ -32,11 +32,6 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
             description: "Control a Home Assistant Light",
             icon: "far fa-lightbulb fa-align-center",
             categories: ["fun", "integrations"] as Effects.EffectCategory[],
-            triggers: {
-                command: true,
-                event: true,
-                manual: true,
-            },
         },
         optionsTemplate: `
             <eos-container header="Light">

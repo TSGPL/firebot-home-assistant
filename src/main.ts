@@ -2,6 +2,8 @@ import { Firebot, RunRequest } from "@crowbartools/firebot-custom-scripts-types"
 import { HomeAssistant } from "./integration"
 import { HomeAssistantAPI } from "./homeassistant";
 import * as controlLight from "./effects/control-light";
+import * as runScript from "./effects/run-script";
+import * as applyScene from "./effects/apply-scene";
 
 interface Params { }
 interface ScriptParams extends Record<string, unknown> { }
@@ -32,6 +34,8 @@ const script: Firebot.CustomScript<Params> = {
 
     // Load effects
     effectManager.registerEffect(controlLight.effect(runRequest));
+    effectManager.registerEffect(runScript.effect());
+    effectManager.registerEffect(applyScene.effect());
   },
 };
 

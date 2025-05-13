@@ -112,4 +112,14 @@ export class HomeAssistantAPI {
         
         this.client.post('services/light/' + service, effectData);
     }
+    
+    public runScript(effect: any) {
+        this.logger.info('Received effect for running script', effect);        
+        this.client.post('services/script/turn_on', {'entity_id': effect.entity_id});
+    }
+    
+    public applyScene(effect: any) {
+        this.logger.info('Received effect for applying scene', effect);        
+        this.client.post('services/scene/turn_on', {'entity_id': effect.entity_id});
+    }
 }
