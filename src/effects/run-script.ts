@@ -9,7 +9,7 @@ export const effect = () => {
             id: "ha:run-script",
             name: "Run Home Assistant Script",
             description: "Run a Home Assistant script",
-            icon: "far fa-lightbulb fa-align-center",
+            icon: "fad fa-code",
             categories: ["fun", "integrations"] as Effects.EffectCategory[],
         },
         optionsTemplate: `

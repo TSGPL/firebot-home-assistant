@@ -9,7 +9,7 @@ export const effect = () => {
             id: "ha:apply-scene-script",
             name: "Apply Home Assistant Scene",
             description: "Apply a Home Assistant scene",
-            icon: "far fa-lightbulb fa-align-center",
+            icon: "far fa-house-signal fa-align-center",
             categories: ["fun", "integrations"] as Effects.EffectCategory[],
         },
         optionsTemplate: `
