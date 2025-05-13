@@ -4,7 +4,6 @@ import axios, { Axios } from "axios";
 interface EffectType {
     entity_id: string,
     brightness_pct?: number,
-    color_mode?: string,
     rgb_color?: Array<number>
 }
 
@@ -81,7 +80,7 @@ export class HomeAssistantAPI {
         this.logger.info('Received effect for controlling light', effect);
 
         let effectData: EffectType = {'entity_id': effect.lightId};
-        let service = 'on';
+        let service = 'turn_on';
         switch(effect.activationAction) {
             case 'on': {
                 service = 'turn_on';
@@ -101,7 +100,6 @@ export class HomeAssistantAPI {
             effectData.brightness_pct = effect.brightnessPercentage;
         }
 
-        // @TODO: colors not working yet
         if (effect.updateColor && effect.color) {
             // extract colors from the hex code
             let allcolors = parseInt(/^#?([a-f\d]{6})$/i.exec(effect.color)[1], 16);
@@ -109,11 +107,8 @@ export class HomeAssistantAPI {
                 g = (allcolors >> 8) & 255,
                 b = allcolors & 255;
 
-            effectData.color_mode = 'rgb';
             effectData.rgb_color  = [r, g, b];
         }
-
-        this.logger.info('Control light: '  + service, effectData);
         
         this.client.post('services/light/' + service, effectData);
     }
