@@ -9,12 +9,15 @@ For now, the integration adds 1 effect, which allows you to control any lights t
 ## How to use
 1. Download the latest **firebot-ha.js** file from [Releases](https://github.com/TSGPL/firebot-home-assistant/releases)
 2. Add the **firebot-ha.js** as a startup script in [Firebot](https://firebot.app/) (Settings > Advanced > Startup Scripts).
-3. After restarting Firebot. The Home Assistant integration, and a new effect called **Control Home Assistant Light** will have been added.
+3. After restarting Firebot. The Home Assistant integration, and a 2 new effects called **Control Home Assistant Light** & **Apply Home Assistant Scene** will have been added.
 4. Visit the Integration settings (Settings > Integrations). And under the *Configure* tab, paste in the URL and Access Token of your Home Assistant instance. (Steps on where to find your access token are in the configuration tab of the integration)
 
 ## Future Features
 The following list of features that are planned to be implemented. Do note, that this list may change over time and some of the features that are currently listed might not end up being added (they're also placed in no particular order):
 - [ ] Add an effect for controlling smart plugs.
+
+## Known Issues
+There are currently no known issues with this integration.
 
 ## Credits
 Due to this being our first Firebot Script. Not all, but a lot of the scripts are based on or copied from other projects. So it only felt right to credit them here!
