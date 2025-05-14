@@ -1,7 +1,9 @@
 import { Firebot, RunRequest } from "@crowbartools/firebot-custom-scripts-types";
 import { HomeAssistant } from "./integration"
+import { HomeAssistantAPI } from "./homeassistant";
 import * as controlLight from "./effects/control-light";
-import * as toggleLight from "./effects/toggle-light";
+import * as runScript from "./effects/run-script";
+import * as applyScene from "./effects/apply-scene";
 
 interface Params { }
 interface ScriptParams extends Record<string, unknown> { }
@@ -11,9 +13,9 @@ const script: Firebot.CustomScript<Params> = {
     return {
       name: "Firebot Home Assistant",
       description:
-        "Custom Script for Integrating Home Assistant into Firebot for controlling Smart Lights!",
-      author: "TSGPL_ & M1sterTux",
-      version: "0.1.1",
+        "A Home Assistant integration for Firebot to control lights",
+      author: "TSGPL & M1sterTux",
+      version: "0.2.0 Alpha",
       firebotVersion: "5",
       startupOnly: true,
     };
@@ -22,15 +24,18 @@ const script: Firebot.CustomScript<Params> = {
     return {};
   },
   run: (runRequest: RunRequest<ScriptParams>) => {
-    const { logger, integrationManager } = runRequest.modules;
-    logger.info("Loading Home Assistant custom script")
+    const { logger, integrationManager, effectManager } = runRequest.modules;
+    logger.info("Loading Home Assistant Integration")
+
+    const ha = HomeAssistantAPI.make();
 
     // Load Integration setup
-    integrationManager.registerIntegration(HomeAssistant(logger));
+    integrationManager.registerIntegration(HomeAssistant(logger, ha));
 
     // Load effects
-    runRequest.modules.effectManager.registerEffect(controlLight.effect(runRequest));
-    runRequest.modules.effectManager.registerEffect(toggleLight.effect(runRequest));
+    effectManager.registerEffect(controlLight.effect(runRequest));
+    effectManager.registerEffect(runScript.effect());
+    effectManager.registerEffect(applyScene.effect());
   },
 };
 
