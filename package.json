@@ -1,8 +1,8 @@
 {
   "name": "firebot-home-assistant",
   "scriptOutputName": "firebot-home-assistant",
-  "version": "0.1.1",
-  "description": "A Firebot script to control Home Assistant",
+  "version": "0.2.0 Alpha",
+  "description": "A Home Assistant integration for Firebot to control lights",
   "main": "",
   "scripts": {
     "build": "webpack",
@@ -11,7 +11,7 @@
     "copy": "node ./scripts/copy-build.js",
     "test": "jest"
   },
-  "author": "TSGPL_ & M1sterTux",
+  "author": "TSGPL & M1sterTux",
   "license": "GNU3",
   "devDependencies": {
     "@types/node": "^20.16.14",

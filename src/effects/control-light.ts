@@ -38,7 +38,7 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
                 <firebot-input
                     input-title="Light"
                     model="effect.lightId"
-                    placeholder="Enter entity ID"
+                    placeholder="Please enter a light entity_id"
                 />
             </eos-container>
         
