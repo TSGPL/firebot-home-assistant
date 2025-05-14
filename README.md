@@ -1,16 +1,17 @@
-# [WORK IN PROGRESS] Home Assistant Integration for Firebot
+# Home Assistant Integration for Firebot [Alpha]
 
 ## Overview
 Have you ever wanted to control your lights however you'd like with Firebot but don't have a Philips Hue light due to their price?
 Well, as long as those lights are connected through Home Assistant, now you can!
 
-For now, the integration adds 1 effect, which allows you to control any lights that you have connected through Home Assistant. We're open to adding more features in the future, but this is the integration's main purpose!
+For now, the integration adds 3 effects, which allows you to run any Scenes & Scripts, as well as control any lights that you have connected with Home Assistant.
+We're open to adding more features in the future, but this is currently the integration's main purpose.
 
 ## How to use
 1. Download the latest **firebot-ha.js** file from [Releases](https://github.com/TSGPL/firebot-home-assistant/releases)
-2. Add the **firebot-ha.js** as a startup script in [Firebot](https://firebot.app/) (Settings > Advanced > Startup Scripts).
+2. Add the **firebot-home-assistant.js** as a startup script in [Firebot](https://firebot.app/) (Settings > Advanced > Startup Scripts).
 3. After restarting Firebot. The Home Assistant integration, and a 3 new effects called **Control Home Assistant Light**, **Apply Home Assistant Scene**, & **Run Home Assistant Script** will have been added.
-4. Visit the Integration settings (Settings > Integrations). And under the *Configure* tab, paste in the URL and Access Token of your Home Assistant instance. (Steps on where to find your access token are in the configuration tab of the integration)
+4. Visit the Integration settings (Settings > Integrations). And under the *Configure* tab, paste in the URL and Access Token of your Home Assistant instance. (Steps on where to find your access token are in the configuration tab of the integration, inside of firebot)
 
 ## Future Features
 The following list of features that are planned to be implemented. Do note, that this list may change over time and some of the features that are currently listed might not end up being added (they're also placed in no particular order):
