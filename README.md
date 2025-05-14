@@ -15,10 +15,10 @@ We're open to adding more features in the future, but this is currently the inte
 
 ## Future Features
 The following list of features that are planned to be implemented. Do note, that this list may change over time and some of the features that are currently listed might not end up being added (they're also placed in no particular order):
-- [ ] Add an effect for controlling smart plugs.
+- [ ] Add an effect for controlling smart plugs
 
 ## Known Issues
-There are currently no known issues with this integration.
+There are currently no known issues with the integration.
 
 ## Credits
 Due to this being our first Firebot Script. Not all, but a lot of the scripts are based on or copied from other projects. So it only felt right to credit them here!
