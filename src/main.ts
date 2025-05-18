@@ -2,6 +2,7 @@ import { Firebot, RunRequest } from "@crowbartools/firebot-custom-scripts-types"
 import { HomeAssistant } from "./integration"
 import { HomeAssistantAPI } from "./homeassistant";
 import * as controlLight from "./effects/control-light";
+import * as controlSwitch from "./effects/control-switch";
 import * as runScript from "./effects/run-script";
 import * as applyScene from "./effects/apply-scene";
 
@@ -13,9 +14,9 @@ const script: Firebot.CustomScript<Params> = {
     return {
       name: "Firebot Home Assistant",
       description:
-        "A Home Assistant integration for Firebot to control lights",
+        "A Home Assistant integration for Firebot to control smart devices",
       author: "TSGPL & M1sterTux",
-      version: "0.2.0 Alpha",
+      version: "0.3.0 Alpha",
       firebotVersion: "5",
       startupOnly: true,
     };
@@ -34,6 +35,7 @@ const script: Firebot.CustomScript<Params> = {
 
     // Load effects
     effectManager.registerEffect(controlLight.effect(runRequest));
+    effectManager.registerEffect(controlSwitch.effect(runRequest));
     effectManager.registerEffect(runScript.effect());
     effectManager.registerEffect(applyScene.effect());
   },

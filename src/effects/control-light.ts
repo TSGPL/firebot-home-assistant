@@ -4,24 +4,6 @@ import { HomeAssistantAPI, HaEntity } from "../homeassistant";
 import { HomeAssistant } from "../integration";
 
 interface ScriptParams extends Record<string, unknown> { }
-export type HaControlLightEffectData = {
-    lightId: string;
-    updateActivated: boolean;
-    activationAction?: "off" | "on" | "toggle";
-    updateBrightness: boolean;
-    brightnessPercentage?: string;
-    updateColor: boolean;
-    /**
-     * Hex color string
-     */
-    color?: string;
-    triggerEffectAnimation: boolean;
-    effectAnimationType?: "colorloop" | "none";
-    triggerAlert: boolean;
-    alertType?: "short" | "long" | "disable";
-    transitionType?: "default" | "instant" | "fast" | "slow" | "custom";
-    customTransitionSecs?: string;
-};
 
 export const effect = (runRequest: RunRequest<ScriptParams>) => {
     const logger = runRequest.modules.logger;

@@ -112,7 +112,28 @@ export class HomeAssistantAPI {
         
         this.client.post('services/light/' + service, effectData);
     }
-    
+
+    public controlSwitch(effect: any) {
+        this.logger.info('Received effect for controlling switch', effect);
+        let service = 'turn_on';
+        switch(effect.activationAction) {
+            case 'on': {
+                service = 'turn_on';
+                break;
+            }
+            case 'off': {
+                service = 'turn_off';
+                break;
+            }
+            case 'toggle': {
+                service = 'toggle';
+                break;
+            }
+        }
+        
+        this.client.post('services/switch/' + service, {'entity_id': effect.entity_id});
+    }
+
     public runScript(effect: any) {
         this.logger.info('Received effect for running script', effect);        
         this.client.post('services/script/turn_on', {'entity_id': effect.entity_id});
