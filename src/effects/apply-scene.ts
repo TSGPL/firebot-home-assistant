@@ -6,7 +6,7 @@ interface ScriptParams extends Record<string, unknown> {}
 export const effect = () => {
     return {
         definition: {
-            id: "ha:apply-scene-script",
+            id: "ha:apply-scene",
             name: "Apply Home Assistant Scene",
             description: "Apply a Home Assistant scene",
             icon: "far fa-house-signal fa-align-center",
