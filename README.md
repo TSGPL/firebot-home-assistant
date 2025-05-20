@@ -9,7 +9,7 @@ We're open to adding more features in the future, but this is currently the inte
 
 ## How to use
 1. Download the latest **firebot-ha.js** file from [Releases](https://github.com/TSGPL/firebot-home-assistant/releases)
-2. Add the **firebot-home-assistant.js** as a startup script in [Firebot](https://firebot.app/) (Settings > Advanced > Startup Scripts).
+2. Add the **firebot-home-assistant.js** as a startup script in [Firebot](https://firebot.app/) (Settings > Scripts > Startup Scripts).
 3. After restarting Firebot. The Home Assistant integration, and a 3 new effects called **Control Home Assistant Light**, **Apply Home Assistant Scene**, & **Run Home Assistant Script** will have been added.
 4. Visit the Integration settings (Settings > Integrations). And under the *Configure* tab, paste in the URL and Access Token of your Home Assistant instance. (Steps on where to find your access token are in the configuration tab of the integration, inside of firebot)
 
