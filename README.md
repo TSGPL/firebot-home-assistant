@@ -15,10 +15,12 @@ We're open to adding more features in the future, but this is currently the inte
 
 ## Future Features
 The following list of features that are planned to be implemented. Do note, that this list may change over time and some of the features that are currently listed might not end up being added (they're also placed in no particular order):
-- [ ] Add an effect for controlling smart plugs
+- [X] Add an effect for controlling smart plugs
+- [ ] Add white color temperature control to the Light Effect
+- [ ] Add the ability to use custom variables in the color field to the Light Effect
 
 ## Known Issues
-There are currently no known issues with the integration.
+- Can't use custom variables in the color field inside the Light Effect
 
 ## Credits
 Due to this being our first Firebot Script. Not all, but a lot of the scripts are based on or copied from other projects. So it only felt right to credit them here!
