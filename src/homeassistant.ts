@@ -145,7 +145,13 @@ export class HomeAssistantAPI {
     }
     
     public applyScene(effect: any) {
-        this.logger.info('Received effect for applying scene', effect);        
-        this.client.post('services/scene/turn_on', {'entity_id': effect.entity_id});
+        this.logger.info('Received effect for applying scene', effect);      
+        
+        let effectData: EffectType = {'entity_id': effect.entity_id};
+        if (effect.updateTransition && effect.transition) {
+            effectData.transition = effect.transition;
+        }
+
+        this.client.post('services/scene/turn_on', effectData);
     }
 }

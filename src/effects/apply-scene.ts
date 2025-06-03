@@ -19,6 +19,21 @@ export const effect = () => {
                     model="effect.entity_id"
                     placeholder="Enter entity ID"
                 />
+            </eos-container>
+
+            <eos-container header="Options" ng-if="effect.entity_id" pad-top="true">
+            
+                <firebot-checkbox
+                    label="Transition"
+                    model="effect.updateTransition"
+                />
+                <div ng-if="effect.updateTransition" class="ml-10 mb-3">
+                     <firebot-input
+                        input-title="Transition time in seconds"
+                        data-type="number"
+                        model="effect.transition"
+                    />
+                </div>
             </eos-container>`,
         optionsController: () => {},
         // A fail-safe to make sure that the required text isn't missing in the effect input.
@@ -27,6 +42,10 @@ export const effect = () => {
 
             if (!effect.entity_id) {
                 errors.push("Please enter a scene entity_id");
+            }
+
+            if (effect.updateTransition && !effect.transition) {
+                errors.push("Please select a transition time");
             }
 
             return errors;
