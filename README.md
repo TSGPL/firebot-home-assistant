@@ -21,6 +21,7 @@ The following list of features that are planned to be implemented. Do note, that
 
 ## Known Issues
 - Can't use custom variables in the color field inside the Light Effect
+- Firebot uses cached Home Assistant URL instead of the one provided.
 
 ## Credits
 Due to this being our first Firebot Script. Not all, but a lot of the scripts are based on or copied from other projects. So it only felt right to credit them here!
