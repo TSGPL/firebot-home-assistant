@@ -4,7 +4,8 @@ import axios, { Axios } from "axios";
 interface EffectType {
     entity_id: string,
     brightness_pct?: number,
-    rgb_color?: Array<number>
+    rgb_color?: Array<number>,
+    transition?: number
 }
 
 export interface HaEntity {
@@ -109,6 +110,10 @@ export class HomeAssistantAPI {
 
             effectData.rgb_color  = [r, g, b];
         }
+
+        if (effect.updateTransition && effect.transition) {
+            effectData.transition = effect.transition;
+        }
         
         this.client.post('services/light/' + service, effectData);
     }
@@ -140,7 +145,13 @@ export class HomeAssistantAPI {
     }
     
     public applyScene(effect: any) {
-        this.logger.info('Received effect for applying scene', effect);        
-        this.client.post('services/scene/turn_on', {'entity_id': effect.entity_id});
+        this.logger.info('Received effect for applying scene', effect);      
+        
+        let effectData: EffectType = {'entity_id': effect.entity_id};
+        if (effect.updateTransition && effect.transition) {
+            effectData.transition = effect.transition;
+        }
+
+        this.client.post('services/scene/turn_on', effectData);
     }
 }

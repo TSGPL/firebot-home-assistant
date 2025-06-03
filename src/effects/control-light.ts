@@ -1,7 +1,6 @@
 import { RunRequest } from "@crowbartools/firebot-custom-scripts-types";
 import { Effects, EffectScope } from "@crowbartools/firebot-custom-scripts-types/types/effects";
 import { HomeAssistantAPI, HaEntity } from "../homeassistant";
-import { HomeAssistant } from "../integration";
 
 interface ScriptParams extends Record<string, unknown> { }
 
@@ -56,6 +55,18 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
                 <div ng-if="effect.updateColor" class="ml-10 mb-3">
                     <color-picker-input model="effect.color" />
                 </div>
+        
+                <firebot-checkbox
+                    label="Transition"
+                    model="effect.updateTransition"
+                />
+                <div ng-if="effect.updateTransition" class="ml-10 mb-3">
+                     <firebot-input
+                        input-title="Transition time in seconds"
+                        data-type="number"
+                        model="effect.transition"
+                    />
+                </div>
             </eos-container>`,
         optionsController: ($scope: any, backendCommunicator: any) => {
             if (!$scope.effect.text) {
@@ -89,6 +100,10 @@ export const effect = (runRequest: RunRequest<ScriptParams>) => {
 
             if (effect.updateColor && !effect.color) {
                 errors.push("Please select a color");
+            }
+
+            if (effect.updateTransition && !effect.transition) {
+                errors.push("Please select a transition time");
             }
 
             return errors;
