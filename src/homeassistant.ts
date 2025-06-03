@@ -4,7 +4,8 @@ import axios, { Axios } from "axios";
 interface EffectType {
     entity_id: string,
     brightness_pct?: number,
-    rgb_color?: Array<number>
+    rgb_color?: Array<number>,
+    transition?: number
 }
 
 export interface HaEntity {
@@ -108,6 +109,10 @@ export class HomeAssistantAPI {
                 b = allcolors & 255;
 
             effectData.rgb_color  = [r, g, b];
+        }
+
+        if (effect.updateTransition && effect.transition) {
+            effectData.transition = effect.transition;
         }
         
         this.client.post('services/light/' + service, effectData);
