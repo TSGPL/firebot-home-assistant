@@ -1,7 +1,7 @@
 {
   "name": "firebot-home-assistant",
   "scriptOutputName": "firebot-home-assistant",
-  "version": "0.3.0 Alpha",
+  "version": "0.3.1 Alpha",
   "description": "A Home Assistant integration for Firebot to control lights",
   "main": "",
   "scripts": {
